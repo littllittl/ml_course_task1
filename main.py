@@ -23,31 +23,29 @@ def get_age(day, month, year):
         return now.year - int(year) - 1
     return now.year - int(year)
 
+ def gt_struct(nms,snms)
+    if str(nms) not in snms:
+                snms['{}'.format(nms)] = 1
+            else:
+                snms['{}'.format(nms)] += 1
+    return snms
 
 def create_dict(list_members, sex, birthdays, fnames, mnames):
     for member in list_members:
         names = member['first_name']
         if member['sex'] == 1:
             sex['female'] += 1
-            if str(names) not in fnames:
-                fnames['{}'.format(names)] = 1
-            else:
-                fnames['{}'.format(names)] += 1
+            fnames=gt_struct(names,fnames)
         elif member['sex'] == 2:
             sex['male'] += 1
-            if str(names) not in mnames:
-                mnames['{}'.format(names)] = 1
-            else:
-                mnames['{}'.format(names)] += 1
+            mnames=gt_struct(names,mnames)
         else:
             sex['None'] += 1
         try:
             day, month, year = member['bdate'].split('.')
             age = get_age(day, month, year)
             if str(age) not in birthdays:
-                birthdays['{}'.format(age)] = 1
-            else:
-                birthdays['{}'.format(age)] += 1
+                birthdays=gt_struct(age,birthdays)
         except Exception:
             continue
 
@@ -84,9 +82,9 @@ def get_diagram(api, Data, public_name):
     plt.text(-1.5, -1.05,
              'Из них:\n {} - мужчины \n {} - женщины\n {} - пол не указан'.format(Data[2]['male'], Data[2]['female'], Data[2]['None']),
              size='large')
-    F = sorted(Data[3].items(), key=itemgetter(1),reverse=True)
+    F = sorted(Data[3].items(), key=itemgetter(1),reverse=True) 
     M = sorted(Data[4].items(), key=itemgetter(1),reverse=True)
-    plt.text(-1.7,-1.2,'Самое популярное женское имя {}\n Самое популярное мужское имя {}'.format(F[1], M[1]), size='large')
+    plt.text(-1.7,-1.2,'Самое популярное женское имя {}\n Самое популярное мужское имя {}'.format(F[1], M[1]), size='large')#F[0] будет 'DELETED' для любого крупного паблика
     plt.title('Диаграмма возрастов\n{}'.format(public_name))
     plt.show()
 session = vk.Session(access_token=get_token())
